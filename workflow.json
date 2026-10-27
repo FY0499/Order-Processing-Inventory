@@ -1,0 +1,335 @@
+{
+  "name": "10 - أتمتة معالجة الطلبات (Order Processing - Form Trigger)",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "طلب جديد",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "رقم الطلب",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "اسم العميل",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "بريد العميل",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "SKU المنتج",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "الكمية",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4b8a9c52-9390-4d1c-a32a-df5aa1485893",
+      "name": "📋 فورم طلب جديد",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -1168,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1bXtq2joeCLYfNlVtMk_N_0_6_bfZNkWOmnSXZ0ofK1I",
+          "mode": "list",
+          "cachedResultName": "Inventory",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "الورقة1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "sku",
+              "lookupValue": "={{ $json['SKU المنتج'] }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "990cc739-427f-4e7a-a71d-9f6bd38cafb2",
+      "name": "Sheets - فحص المخزون",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        -912,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.quantity }}",
+              "rightValue": "={{ $('📋 فورم طلب جديد').item.json['الكمية'] }}",
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              },
+              "id": "cb66ac88-624c-469a-b642-a749c28d2c09"
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "27b369ea-5056-4a95-996a-eab15461b2c8",
+      "name": "If - المخزون كافٍ؟",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -672,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1bXtq2joeCLYfNlVtMk_N_0_6_bfZNkWOmnSXZ0ofK1I",
+          "mode": "list",
+          "cachedResultName": "Inventory",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "الورقة1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "sku": "={{ $json.sku }}",
+            "quantity": "={{ $json.quantity - $('📋 فورم طلب جديد').item.json['الكمية'] }}",
+            "row_number": 0
+          },
+          "matchingColumns": [
+            "sku"
+          ],
+          "schema": [
+            {
+              "id": "sku",
+              "displayName": "sku",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "quantity",
+              "displayName": "quantity",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "36c61176-fe44-4c7f-94c9-f8ca3b9aba1d",
+      "name": "Sheets - تحديث المخزون",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        -416,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1JUTZ8OcFdIWT4OjXcGx5vyFu-L6mbCGpLeEbo-8Z3Q0",
+          "mode": "list",
+          "cachedResultName": "Orders",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "الورقة1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit#gid=0"
+        },
+        "options": {}
+      },
+      "id": "a7e392a9-988a-4040-beef-f52bc5ec7a0d",
+      "name": "Sheets - حفظ الطلب",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.3,
+      "position": [
+        -160,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('📋 فورم طلب جديد').item.json['بريد العميل'] }}",
+        "subject": "=تأكيد طلبك رقم {{ $('📋 فورم طلب جديد').item.json['رقم الطلب'] }}",
+        "emailType": "text",
+        "message": "=شكراً لطلبك! تم تأكيد الطلب وسيتم شحنه قريباً.\n\nرقم الطلب: {{ $('📋 فورم طلب جديد').item.json['رقم الطلب'] }}\nالمنتج: {{ $('📋 فورم طلب جديد').item.json['SKU المنتج'] }}\nالكمية: {{ $('📋 فورم طلب جديد').item.json['الكمية'] }}",
+        "options": {}
+      },
+      "id": "40bff637-22c1-4a12-bcb7-6ca174ba1799",
+      "name": "Gmail - تأكيد الطلب",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        96,
+        96
+      ]
+    },
+    {
+      "parameters": {
+        "text": "=⚠️ نفاذ مخزون! المنتج {{ $('📋 فورم طلب جديد').item.json['SKU المنتج'] }} لا يوجد كمية كافية للطلب {{ $('📋 فورم طلب جديد').item.json['رقم الطلب'] }}",
+        "additionalFields": {}
+      },
+      "id": "b293d5c8-468e-423a-8ac2-ecab014a8f66",
+      "name": "Telegram - تنبيه نفاذ مخزون",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -416,
+        352
+      ]
+    }
+  ],
+  "pinData": {
+    "📋 فورم طلب جديد": [
+      {
+        "json": {
+          "رقم الطلب": "266595",
+          "اسم العميل": "farah",
+          "بريد العميل": "your-email@example.com",
+          "SKU المنتج": "45",
+          "الكمية": "8",
+          "submittedAt": "2026-08-15T22:40:46.457+03:00",
+          "formMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "📋 فورم طلب جديد": {
+      "main": [
+        [
+          {
+            "node": "Sheets - فحص المخزون",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheets - فحص المخزون": {
+      "main": [
+        [
+          {
+            "node": "If - المخزون كافٍ؟",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If - المخزون كافٍ؟": {
+      "main": [
+        [
+          {
+            "node": "Sheets - تحديث المخزون",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Telegram - تنبيه نفاذ مخزون",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheets - تحديث المخزون": {
+      "main": [
+        [
+          {
+            "node": "Sheets - حفظ الطلب",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sheets - حفظ الطلب": {
+      "main": [
+        [
+          {
+            "node": "Gmail - تأكيد الطلب",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "meta": {},
+  "nodeGroups": [],
+  "tags": []
+}
