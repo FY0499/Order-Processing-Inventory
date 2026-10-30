@@ -1,7 +1,5 @@
 # Order Processing & Inventory Automation
 
-I built and tested this workflow from start to finish.
-
 I built this n8n workflow to handle incoming orders, check product availability, update inventory, and notify the customer or team about the order status.
 
 <img width="779" height="238" alt="Order Processing and Inventory workflow demo" src="https://github.com/user-attachments/assets/541f2693-2fe2-4e16-8979-b07dc9c7839d" />
