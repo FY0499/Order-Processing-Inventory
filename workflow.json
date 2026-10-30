@@ -43,7 +43,7 @@
       "parameters": {
         "documentId": {
           "__rl": true,
-          "value": "1bXtq2joeCLYfNlVtMk_N_0_6_bfZNkWOmnSXZ0ofK1I",
+          "value": "YOUR_SPREADSHEET_ID",
           "mode": "list",
           "cachedResultName": "Inventory",
           "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
@@ -113,7 +113,7 @@
         "operation": "update",
         "documentId": {
           "__rl": true,
-          "value": "1bXtq2joeCLYfNlVtMk_N_0_6_bfZNkWOmnSXZ0ofK1I",
+          "value": "YOUR_SPREADSHEET_ID",
           "mode": "list",
           "cachedResultName": "Inventory",
           "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
@@ -186,7 +186,7 @@
       "parameters": {
         "documentId": {
           "__rl": true,
-          "value": "1JUTZ8OcFdIWT4OjXcGx5vyFu-L6mbCGpLeEbo-8Z3Q0",
+          "value": "YOUR_SPREADSHEET_ID",
           "mode": "list",
           "cachedResultName": "Orders",
           "cachedResultUrl": "https://docs.google.com/spreadsheets/d/YOUR_GOOGLE_SHEET_ID/edit?usp=drivesdk"
